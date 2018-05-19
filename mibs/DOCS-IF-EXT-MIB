@@ -39,7 +39,9 @@ docsIfDocsisCapability OBJECT-TYPE
         MAX-ACCESS  read-only
         STATUS      current
         DESCRIPTION
-             "Indication of the DOCSIS capability of the device."
+             "Indication of the DOCSIS capability of the device.
+
+             "
         ::= { docsIfExtMib 1 }
 
 docsIfDocsisOperMode OBJECT-TYPE
@@ -48,8 +50,10 @@ docsIfDocsisOperMode OBJECT-TYPE
         STATUS      current
         DESCRIPTION
              "Indication whether the device has registered as a 1.0 or 1.1.
-              For CMTS and unregistered CM, it is always the same as
-              docsDocsisCapability."
+
+              For CMTS and unregistered CM, it is always the same as docsDevDocsisCapability.
+
+             "
         ::= { docsIfExtMib 2 }
 
 
@@ -88,7 +92,7 @@ docsIfCmtsCmStatusDocsisMode OBJECT-TYPE
         MAX-ACCESS  read-only
         STATUS      current
         DESCRIPTION
-            "Indication whether the CM has registered as a 1.0 or 1.1 modem"
+            "Indication whether the CM has registered as a 1.0 or 1.1 modem               "
         ::= { docsIfCmtsCmStatusExtEntry 1 }
 
 docsIfExtConformance  OBJECT IDENTIFIER     ::= { docsIfExtMib 4 }

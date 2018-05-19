@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -228,7 +227,7 @@ encode_vbind (char *oid_string, char oid_asntype, union t_val *value,
 				    &out_size);
       }
 #ifdef DEBUG
-      fprintf (stderr, "encoded len %ld var_len %zd leftover %zd difference %zd\n", len, name_len, out_size, (data_ptr - out_buffer) );
+      fprintf (stderr, "encoded len %ld var_len %d leftover %ud difference %d\n", len, name_len, out_size, (data_ptr - out_buffer) );
 #endif
       return data_ptr - out_buffer;
       break;
@@ -290,11 +289,11 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   oid objid[MAX_OID_LEN];
   char _docsis_snmp_label[50];	/* To hold the 'name' of the type, i.e. Integer etc */
   char *enum_string = NULL;
-  static char outbuf[16384];
+  static char outbuf[1024];
   struct tree *subtree;
   struct enum_list *enums;
 
-  memset (outbuf, 0, 16384);
+  memset (outbuf, 0, 1024);
 
   vp = (struct variable_list *) malloc (sizeof (struct variable_list));
   if (vp == NULL)
@@ -340,11 +339,6 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   netsnmp_ds_set_int (NETSNMP_DS_LIBRARY_ID,
 			      NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
 			      NETSNMP_OID_OUTPUT_SUFFIX);
-
-  if (netsnmp_ds_get_boolean(NETSNMP_DS_LIBRARY_ID, NETSNMP_OID_OUTPUT_NUMERIC)) {
-        netsnmp_ds_set_int(NETSNMP_DS_LIBRARY_ID, NETSNMP_DS_LIB_OID_OUTPUT_FORMAT,
-                                                  NETSNMP_OID_OUTPUT_NUMERIC);
-  }
 
   snprint_objid (outbuf, 1023, vp->name, vp->name_length);
 
@@ -580,7 +574,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
 		{
 		 	snprintf(outbuf, vp->val_len+5, "\"%s\"", vp->val.string);
 		} else {
-			snprint_hexadecimal (outbuf, 16383, (char *) vp->val.string, vp->val_len);
+			snprint_hexadecimal (outbuf, 1023, (char *) vp->val.string, vp->val_len);
       			memset (_docsis_snmp_label, 0, 50);
       			sprintf (_docsis_snmp_label, "HexString");
 		}
@@ -617,7 +611,7 @@ decode_vbind (unsigned char *data, unsigned int vb_len)
   if (enum_string)
 	printf(" %s %s; /* %s */", _docsis_snmp_label, outbuf, enum_string);
   else
-	printf(" %s %s;", _docsis_snmp_label, outbuf);
+	printf(" %s %s ;", _docsis_snmp_label, outbuf);
 
 
   snmp_free_var (vp);
@@ -706,6 +700,7 @@ _docsis_snmp_build_var_op(u_char * data,
                           size_t * listlength)
 {
     size_t          dummyLen, headerLen;
+    u_char	 *tmpDataPtr;
     u_char         *dataPtr;
 
     dummyLen = *listlength;
@@ -726,6 +721,7 @@ _docsis_snmp_build_var_op(u_char * data,
     headerLen = data - dataPtr;
     *listlength -= headerLen;
     DEBUGDUMPHEADER("send", "Name");
+    tmpDataPtr = data;
     data = asn_build_objid(data, listlength,
                            (u_char) (ASN_UNIVERSAL | ASN_PRIMITIVE |
                                      ASN_OBJECT_ID), var_name,
@@ -761,6 +757,7 @@ _docsis_snmp_build_var_op(u_char * data,
     case ASN_IPADDRESS:
     case ASN_OPAQUE:
     case ASN_NSAP:
+    	tmpDataPtr = data;
         data = asn_build_string(data, listlength, var_val_type,
                                 var_val, var_val_len);
         break;

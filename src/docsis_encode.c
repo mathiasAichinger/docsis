@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,22 +70,6 @@ int encode_uint ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( sizeof(unsigned int));
 }
 
-int encode_uint24 ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  unsigned char byte1, byte2, byte3;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-
-  byte1 = (helper->uintval >> (0)) & 0xFF;
-  byte2 = (helper->uintval >> (8)) & 0xFF;
-  byte3 = (helper->uintval >> (16)) & 0xFF;
-
-  memcpy ( buf,&byte3, sizeof(char));
-  memcpy ( buf+sizeof(char),&byte2, sizeof(char));
-  memcpy ( buf+2*sizeof(char),&byte1, sizeof(char));
-  return ( 3 * sizeof(char));
-}
 
 int encode_ushort ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
@@ -179,39 +162,8 @@ int encode_ip( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   return ( sizeof(struct in_addr));
 }
 
-int encode_ip_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  int i;
-  char *token;
-  char *array[16];
-  const char s[2] = ",";
-  struct in_addr in;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-  i = 0;
-  token = strtok(helper->strval, s);
-  while (token != NULL)
-  {
-    array[i] = token;
-    token = strtok (NULL, s);
-    if ( inet_aton ( array[i], &in) ) {
-      memcpy ( buf + 4 * i, &in, sizeof(struct in_addr));
-    } else {
-      fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
-      exit (-1);
-    }
-    i++;
-  }
-  free(helper->strval);
-  return ( i * sizeof(struct in_addr));
-}
-
 int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
 {
-#ifdef DEBUG
-  char ip[INET6_ADDRSTRLEN];
-#endif /*DEBUG */
   struct in6_addr in;
   union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
 
@@ -228,168 +180,15 @@ int encode_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   helper = (union t_val *) tval;
 
   if ( !inet_pton(AF_INET6, helper->strval, &in) ) {
-	fprintf(stderr,  "Invalid IP address %s at line %d\n", helper->strval, line );
+	fprintf(stderr,  "Invalid IP address %s at line %d", helper->strval, line );
 	exit (-1);
   }
 #ifdef DEBUG
-  fprintf(stderr, "encode_ip: found %s at line %d\n", inet_ntop(AF_INET6, &in, ip, sizeof(ip)), line);
+  fprintf(stderr, "encode_ip: found %s at line %d\n",inet_ntoa(in), line);
 #endif /* DEBUG */
   memcpy ( buf, &in, sizeof(struct in6_addr));
   free(helper->strval);
   return ( sizeof(struct in6_addr));
-}
-
-int encode_ip6_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  int i;
-  char *token;
-  char *array[16];
-  const char s[2] = ",";
-  struct in6_addr in6;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-  i = 0;
-  token = strtok(helper->strval, s);
-  while (token != NULL)
-  {
-    array[i] = token;
-    token = strtok (NULL, s);
-    if ( inet_pton ( AF_INET6, array[i], &in6) ) {
-      memcpy ( buf + 16 * i, &in6, sizeof(struct in6_addr));
-    } else {
-      fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
-      exit (-1);
-    }
-    i++;
-  }
-  free(helper->strval);
-  return ( i * sizeof(struct in6_addr));
-}
-
-int encode_ip6_prefix_list( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  char final;
-  char *str1, *str2, *token, *subtoken;
-  char *saveptr1, *saveptr2;
-  int j;
-  struct in6_addr in6;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-
-  for (j = 0, str1 = helper->strval; ; j++, str1 = NULL) {
-    token = strtok_r(str1, ",", &saveptr1);
-    if (token == NULL)
-      break;
-    for (str2 = token; ; str2 = NULL) {
-      subtoken = strtok_r(str2, "/", &saveptr2);
-      if (subtoken == NULL)
-        break;
-      if ( inet_pton ( AF_INET6, subtoken, &in6) ) {
-        memcpy ( buf + 17 * j, &in6, sizeof(struct in6_addr));
-      } else {
-        final = (char)atoi(subtoken);
-        memcpy ( buf + 17 * j + sizeof(struct in6_addr),&final,sizeof(unsigned char));
-      }
-    }
-  }
-
-  free(helper->strval);
-  return ( j * ( sizeof(struct in6_addr) + sizeof(unsigned char) ) );
-}
-
-int encode_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  struct in6_addr in6;
-  struct in_addr in;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-
-  if ( inet_pton(AF_INET6, helper->strval, &in6) ) {
-    memcpy ( buf, &in6, sizeof(struct in6_addr));
-    free(helper->strval);
-    return ( sizeof(struct in6_addr));
-  } else if ( inet_aton ( helper->strval, &in) ) {
-    memcpy ( buf, &in, sizeof(struct in_addr));
-    free(helper->strval);
-    return ( sizeof(struct in_addr));
-  } else {
-    fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
-    exit (-1);
-  }
-}
-
-int encode_char_ip_ip6( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  struct in6_addr in6;
-  struct in_addr in;
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  char ipv4 = 1;
-  char ipv6 = 2;
-
-  helper = (union t_val *) tval;
-
-  if ( inet_pton(AF_INET6, helper->strval, &in6) ) {
-    memcpy ( buf, &ipv6, sizeof(char) );
-    memcpy ( buf + 1, &in6, sizeof(struct in6_addr));
-    free(helper->strval);
-    return ( sizeof(char) + sizeof(struct in6_addr));
-  } else if ( inet_aton ( helper->strval, &in) ) {
-    memcpy ( buf, &ipv4, sizeof(char) );
-    memcpy ( buf + 1, &in, sizeof(struct in_addr));
-    free(helper->strval);
-    return ( sizeof(char) + sizeof(struct in_addr));
-  } else {
-    fprintf(stderr, "Invalid IP address %s at line %d\n", helper->strval, line );
-    exit (-1);
-  }
-}
-
-int encode_ip_ip6_port( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  struct in6_addr in6;
-  struct in_addr in;
-  int i;
-  short int port;
-  char *token;
-  char *array[2];
-  const char s[2] = "/";
-
-  union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */
-
-  helper = (union t_val *) tval;
-
-  i = 0;
-  token = strtok(helper->strval, s);
-  while (token != NULL)
-  {
-    array[i++] = token;
-    token = strtok (NULL, s);
-  }
-  port = htons(atoi(array[1]));
-
-  if ( inet_pton(AF_INET6, array[0], &in6) ) {
-    memcpy ( buf, &in6, sizeof(struct in6_addr));
-    memcpy ( buf + sizeof(struct in6_addr),&port,sizeof(unsigned short));
-    free(helper->strval);
-    return ( sizeof(struct in6_addr) + sizeof(unsigned short));
-  } else if ( inet_aton ( array[0], &in) ) {
-    memcpy ( buf, &in, sizeof(struct in_addr));
-    memcpy ( buf + sizeof(struct in_addr),&port,sizeof(unsigned short));
-    free(helper->strval);
-    return ( sizeof(struct in_addr) + sizeof(unsigned short));
-  } else {
-    fprintf(stderr, "Invalid IP address / port combination %s at line %d\n", helper->strval, line );
-    exit (-1);
-  }
-}
-
-int encode_lenzero( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  return (0);
 }
 
 int encode_ether ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
@@ -418,49 +217,6 @@ union t_val *helper; /* We only use this to cast the void* we receive to what we
 #endif  /* DEBUG */
   free(helper->strval);
   return retval;  /* hopefully this equals 6 :) */
-}
-
-int encode_dual_qtag ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-  int i, final;
-  char *token;
-  char *array[2];
-  const char s[2] = ",";
-  union t_val *helper;
-
-  helper = (union t_val *) tval;
-  i = 0;
-  token = strtok(helper->strval, s);
-  while (token != NULL)
-  {
-     array[i++] = token;
-     token = strtok (NULL, s);
-  }
-  final = htonl(atoi(array[0]) << 16 | atoi(array[1]));
-  memcpy (buf, &final, sizeof(final));
-  free(helper->strval);
-  return (sizeof(final));
-}
-
-int encode_char_list ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
-{
-    short int i;
-    char *token, final;
-    const char s[2] = ",";
-    union t_val *helper;
-
-    helper = (union t_val *) tval;
-    i = 0;
-    token = strtok(helper->strval, s);
-    while (token != NULL)
-    {
-        final = (char)atoi(token);
-        memcpy (buf + i, &final, sizeof(char));
-        token = strtok (NULL, s);
-        i++;
-    }
-    free(helper->strval);
-    return(i * sizeof(char));
 }
 
 int encode_ethermask ( unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
@@ -648,7 +404,6 @@ int encode_hexstr (unsigned char *buf, void *tval, struct symbol_entry *sym_ptr)
   fprintf(stderr, "encode_hexstr: found '%s' on line %d\n", helper->strval, line );
 #endif /* DEBUG */
   free(helper->strval);
-  /* TODO Fix bug added by free(helper->strval) when double quote is used in text config file. */
   return ( i );
 }
 
@@ -673,8 +428,8 @@ int encode_oid(unsigned char *buf, void *tval, struct symbol_entry *sym_ptr )
   helper = (union t_val *) tval;
 
   output_size = encode_snmp_oid(helper->strval, buf, TLV_VSIZE);
-  free(helper->strval);
   return ( output_size );
+  free(helper->strval);
 }
 
 
@@ -686,7 +441,7 @@ unsigned int nr_found=0;
 char *cp;
 char *endptr[1];
 #ifdef DEBUG
-unsigned int i;
+int i;
 #endif
 
 union t_val *helper; /* We only use this to cast the void* we receive to what we think it should be */

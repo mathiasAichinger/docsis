@@ -1,43 +1,47 @@
 /*
- * This is an OpenSSL-compatible implementation of the RSA Data Security, Inc.
- * MD5 Message-Digest Algorithm (RFC 1321).
+ * This is the header file for the MD5 message-digest algorithm.
+ * The algorithm is due to Ron Rivest.  This code was
+ * written by Colin Plumb in 1993, no copyright is claimed.
+ * This code is in the public domain; do with it what you wish.
  *
- * Homepage:
- * http://openwall.info/wiki/people/solar/software/public-domain-source-code/md5
+ * Equivalent code is available from RSA Data Security, Inc.
+ * This code has been tested against that, and is equivalent,
+ * except that you don't need to include two pages of legalese
+ * with every copy.
  *
- * Author:
- * Alexander Peslyak, better known as Solar Designer <solar at openwall.com>
+ * To compute the message digest of a chunk of bytes, declare an
+ * MD5Context structure, pass it to MD5Init, call MD5Update as
+ * needed on buffers full of bytes, and then call MD5Final, which
+ * will fill a supplied 16-byte array with the digest.
  *
- * This software was written by Alexander Peslyak in 2001.  No copyright is
- * claimed, and the software is hereby placed in the public domain.
- * In case this attempt to disclaim copyright and place the software in the
- * public domain is deemed null and void, then the software is
- * Copyright (c) 2001 Alexander Peslyak and it is hereby released to the
- * general public under the following terms:
+ * Changed so as no longer to depend on Colin Plumb's `usual.h'
+ * header definitions; now uses stuff from dpkg's config.h
+ *  - Ian Jackson <ian@chiark.greenend.org.uk>.
+ * Still in the public domain.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted.
- *
- * There's ABSOLUTELY NO WARRANTY, express or implied.
- *
- * See md5.c for more information.
+ * Changed to use uint32_t from stdint.h.
+ *  - Richard Laager <rlaager@wiktel.com>
  */
 
-#if !defined(_MD5_H)
-#define _MD5_H
+#ifndef MD5_H
+#define MD5_H
 
-/* Any 32-bit or wider unsigned integer data type will do */
-typedef unsigned int MD5_u32plus;
+#include <stdint.h>
+#define UWORD32 uint32_t
 
-typedef struct {
-	MD5_u32plus lo, hi;
-	MD5_u32plus a, b, c, d;
-	unsigned char buffer[64];
-	MD5_u32plus block[16];
-} MD5_CTX;
+#define md5byte unsigned char
 
-extern void MD5_Init(MD5_CTX *ctx);
-extern void MD5_Update(MD5_CTX *ctx, const void *data, unsigned long size);
-extern void MD5_Final(unsigned char *result, MD5_CTX *ctx);
+struct MD5Context {
+	UWORD32 buf[4];
+	UWORD32 bytes[2];
+	UWORD32 in[16];
+};
+/* For RSA compatibility. */
+typedef struct MD5Context MD5_CTX;
 
-#endif
+void MD5Init(struct MD5Context *context);
+void MD5Update(struct MD5Context *context, md5byte const *buf, unsigned len);
+void MD5Final(unsigned char digest[16], struct MD5Context *context);
+void MD5Transform(UWORD32 buf[4], UWORD32 const in[16]);
+
+#endif /* !MD5_H */

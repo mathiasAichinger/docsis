@@ -1,0 +1,252 @@
+Main 
+{
+	NetworkAccess 1;
+	GenericTLV TlvCode 202 TlvLength 3 TlvValue 0x010101;
+	SnmpMibObject docsDevSwAdminStatus.0 Integer 2; /* allowProvisioningUpgrade */
+	SnmpMibObject samsungHardwareModel.1 String "tbd" ;
+	SnmpMibObject samsungSwFileName.1 String "tbd" ;
+	SnmpMibObject samsungSwAdminStatus.1 Integer 2; /* allowProvisioningUpgrade */
+	SnmpMibObject samsungCmSwMethod.1 Integer 1; /* secure */
+	SnmpMibObject enterprises.1429.77.1.7.6.0 String "admin" ;
+	SnmpMibObject enterprises.1429.77.1.7.7.0 String "atlanta" ;
+	SnmpMibObject enterprises.1429.77.1.7.2.1.3.10.1 Integer 100 ;
+	SnmpMibObject enterprises.1429.77.1.7.2.1.3.10.2 Integer 100 ;
+	SnmpMibObject enterprises.1429.77.1.7.10.0 HexString 0xffffffffffffffffffff ;
+	SnmpMibObject enterprises.1429.77.1.7.11.0 HexString 0xffffffffffffffffffff ;
+	SnmpMibObject enterprises.1429.77.1.3.7.0 String "W2402" ;
+	SnmpMibObject enterprises.1429.78.1.1.0 Integer 1 ;
+	SnmpMibObject enterprises.1429.78.1.2.0 Integer 1 ;
+	SnmpMibObject enterprises.1429.78.1.7.0 Integer 2 ;
+	SnmpMibObject enterprises.1429.78.1.8.0 Integer 1 ;
+	SnmpMibObject enterprises.1429.78.1.9.0 String "private" ;
+	SnmpMibObject enterprises.1429.78.1.1001.1.0 Integer 1 ;
+	SnmpMibObject enterprises.1429.78.1.1001.2.0 HexString 0x80 ;
+	SnmpMibObject enterprises.1429.78.1.1001.3.0 String "mta" ;
+	SnmpMibObject enterprises.1429.78.1.1001.4.0 HexString 0x4186839b9cd9b840a932e69ae6550c26 ;
+	SnmpMibObject enterprises.1429.78.1.1001.5.0 Integer 1 ;
+	SnmpMibObject enterprises.1429.77.1.6.3.0 Integer 2 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.2.1 String "EPC2203" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.6.1 String "epc2203-E10-13-v202r1262-110516cs.p7b.bin.signed" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.8.1 Integer 2 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.9.1 Integer 1 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.2.2 String "EPC3212" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.6.2 String "e3200-E10-5-v302r125533-110811c-CVC060414.p7b.signed" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.8.2 Integer 2 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.9.2 Integer 1 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.2.3 String "EPC3208" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.6.3 String "e3200-E10-5-v302r125533-110811c-CVC060414.p7b.signed" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.8.3 Integer 2 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.9.3 Integer 1 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.2.4 String "EPC3208G" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.6.4 String "epc3208g-E15-5-v302r12555832-120328c-DE-CVC060414.p7b.signed" ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.8.4 Integer 2 ;
+	SnmpMibObject enterprises.1429.77.1.6.1.1.9.4 Integer 1 ;
+	SnmpMibObject enterprises.1429.77.1.3.8.0 Integer 1 ;
+	VendorSpecific
+	{
+		VendorIdentifier 0x002040;
+		GenericTLV TlvCode 161 TlvLength 1 TlvValue 0x01;
+		GenericTLV TlvCode 213 TlvLength 1 TlvValue 0x01;
+		GenericTLV TlvCode 200 TlvLength 1 TlvValue 0x70;
+		GenericTLV TlvCode 168 TlvLength 1 TlvValue 0x01;
+	}
+	BaselinePrivacy
+	{
+		AuthTimeout 10;
+		ReAuthTimeout 10;
+		AuthGraceTime 600;
+		OperTimeout 10;
+		ReKeyTimeout 10;
+		TEKGraceTime 3600;
+		AuthRejectTimeout 10;
+		SAMapWaitTimeout 1;
+		SAMapMaxRetries 4;
+	}
+	GlobalPrivacyEnable 1;
+	MaxCPE 2;
+	CoSignerCVCData 0x3082037130820259a0030201020210569578200cc553659db721e6f01fff7d300d06092a864886f70d0101050500306f310b3009060355040613024245311f301d060355040a131674436f6d4c616273202d204575726f2d444f4353495331153013060355040b130c4361626c65204d6f64656d73312830260603550403131f4575726f2d444f43534953204361626c65204d6f64656d20526f6f74204341301e170d3033303830383030303030305a170d3133303830373233353935395a305e310b3009060355040613024e4c3111300f060355040a1308393030303030303131143012060355040b130b4575726f2d444f4353495331263024060355;
+	CoSignerCVCData 0x0403131d436f646520566572696669636174696f6e20436572746966696361746530820122300d06092a864886f70d01010105000382010f003082010a0282010100cde7edbd0b7dde45bed5e085116cfcca426af01519e37cbd1e3703b07d3abbf1fc8a8e48acb39e9d541f10880ed0607a86dc840ccd9675f9bf6c311810300189e77bca0b78349f7d25fe7f8357ebe381a60e5ae76e6a24d374fa9fa101c0e6b6aaf815a1627dfcb56a5b967bf8544f7bcaec8c41a2738990843f7e07095f52d5385424348e5b34449c513d93e37ffb014bdc1b3a7f6bd8f4a278d6f30f6e9a7674745f515793b1ae8962af07fb22ffc9f3b33eee2392e5a690e0a351;
+	CoSignerCVCData 0x6dff7915d7f7811b17d13e4559122cb2b947707c95e15a2e60bc6463784eaa6a575f517fc1a73ee554e2e1ad723365f104191bc581d7a85381f23ba9cd9be00272abe12b0203010001a31a301830160603551d250101ff040c300a06082b06010505070303300d06092a864886f70d01010505000382010100899e98e80b2f4695282a7fc1e97f3f9471738da62fc08062354c42f79331ba2af92c2807c12da9ef5137fbe651048641c55b30f7e0b8f7c4a604b55bd57216c289d5f5c54adf2459e4ebf80ad5241edbbc38fc0d64687d44ce5b022645dfd1e71a08b37593ea4483e44d79980f003ed54afd2106a17d678aa8861b085fef0cc61550e930d6;
+	CoSignerCVCData 0x91a3810f0871ef56b7ac48302df3b2f255ec1d26250de326a457c75b99683ae1b6c49fb258e7fe013436b3b65c5781890df12b195dac49ea1b15baf63bef455dd188d433980e5e39301c9ebaffa58038feb3bb333cce6ebaf60bdf38c8bf684b5c004048287da0221e9a78089d3585fce8dcff2a1c76bb9e09cee2;
+	UsPacketClass
+	{
+		ClassifierRef 1;
+		ServiceFlowRef 1;
+		RulePriority 1;
+		ActivationState 1;
+		IpPacketClassifier
+		{
+			IpTos 0x00fcfc;
+		}
+	}
+	UsPacketClass
+	{
+		ClassifierRef 2;
+		ServiceFlowRef 2;
+		RulePriority 2;
+		ActivationState 1;
+		IpPacketClassifier
+		{
+			IpSrcAddr 10.0.0.0;
+			IpSrcMask 255.0.0.0;
+			SrcPortStart 2427;
+			SrcPortEnd 2427;
+			DstPortStart 2427;
+			DstPortEnd 2427;
+		}
+	}
+	DsPacketClass
+	{
+		ClassifierRef 3;
+		ServiceFlowRef 3;
+		RulePriority 1;
+		ActivationState 1;
+		IpPacketClassifier
+		{
+			IpTos 0x00fcfc;
+		}
+	}
+	DsPacketClass
+	{
+		ClassifierRef 4;
+		ServiceFlowRef 4;
+		RulePriority 2;
+		ActivationState 1;
+		IpPacketClassifier
+		{
+			IpDstAddr 10.0.0.0;
+			IpDstMask 255.0.0.0;
+			SrcPortStart 2427;
+			SrcPortEnd 2427;
+			DstPortStart 2427;
+			DstPortEnd 2427;
+		}
+	}
+	UsServiceFlow
+	{
+		UsServiceFlowRef 1;
+		QosParamSetType 7;
+		TrafficPriority 0;
+		MaxRateSustained 5120000;
+		MaxTrafficBurst 8160;
+		MaxConcatenatedBurst 8160;
+		SchedulingType 2;
+		RequestOrTxPolicy 0x00000000;
+		IpTosOverwrite 0x0003;
+	}
+	UsServiceFlow
+	{
+		UsServiceFlowRef 2;
+		QosParamSetType 7;
+		TrafficPriority 7;
+		MaxRateSustained 30000;
+		MinReservedRate 8000;
+		SchedulingType 2;
+		RequestOrTxPolicy 0x00000020;
+		IpTosOverwrite 0x00b8;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 3;
+		QosParamSetType 7;
+		TrafficPriority 0;
+		MaxRateSustained 142000000;
+	}
+	DsServiceFlow
+	{
+		DsServiceFlowRef 4;
+		QosParamSetType 7;
+		TrafficPriority 7;
+		MaxRateSustained 30000;
+		MaxTrafficBurst 1522;
+		MinReservedRate 8000;
+	}
+	SnmpMibObject docsDevNmAccessIp.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessIpMask.1 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessCommunity.1 String "5g21wm7sdl" ;
+	SnmpMibObject docsDevNmAccessControl.1 Integer 3; /* readWrite */
+	SnmpMibObject docsDevNmAccessInterfaces.1 HexString 0x4000 ;
+	SnmpMibObject docsDevNmAccessStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevNmAccessIp.2 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessIpMask.2 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessCommunity.2 String "public" ;
+	SnmpMibObject docsDevNmAccessControl.2 Integer 2; /* read */
+	SnmpMibObject docsDevNmAccessInterfaces.2 HexString 0x4000 ;
+	SnmpMibObject docsDevNmAccessStatus.2 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevNmAccessIp.3 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessIpMask.3 IPAddress 0.0.0.0 ;
+	SnmpMibObject docsDevNmAccessCommunity.3 String "e6jm3asw13" ;
+	SnmpMibObject docsDevNmAccessControl.3 Integer 3; /* readWrite */
+	SnmpMibObject docsDevNmAccessInterfaces.3 HexString 0x4000 ;
+	SnmpMibObject docsDevNmAccessStatus.3 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDefault.0 Integer 2; /* accept */
+	SnmpMibObject docsDevFilterIpBroadcast.10 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.10 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.10 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.10 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.10 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.10 Integer 139 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.10 Integer 137 ;
+	SnmpMibObject docsDevFilterIpProtocol.10 Integer 17 ;
+	SnmpMibObject docsDevFilterIpBroadcast.20 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.20 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.20 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.20 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.20 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.20 Integer 139 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.20 Integer 137 ;
+	SnmpMibObject docsDevFilterIpProtocol.20 Integer 6 ;
+	SnmpMibObject docsDevFilterIpBroadcast.30 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.30 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.30 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.30 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.30 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.30 Integer 445 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.30 Integer 445 ;
+	SnmpMibObject docsDevFilterIpProtocol.30 Integer 6 ;
+	SnmpMibObject docsDevFilterIpBroadcast.90 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.90 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.90 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.90 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.90 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.90 Integer 3127 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.90 Integer 3127 ;
+	SnmpMibObject docsDevFilterIpProtocol.90 Integer 6 ;
+	SnmpMibObject docsDevFilterIpBroadcast.40 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.40 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.40 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.40 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.40 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.40 Integer 135 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.40 Integer 135 ;
+	SnmpMibObject docsDevFilterIpProtocol.40 Integer 6 ;
+	SnmpMibObject docsDevFilterIpBroadcast.60 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.60 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.60 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.60 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.60 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.60 Integer 135 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.60 Integer 135 ;
+	SnmpMibObject docsDevFilterIpProtocol.60 Integer 17 ;
+	SnmpMibObject docsDevFilterIpBroadcast.80 Integer 2; /* false */
+	SnmpMibObject docsDevFilterIpDirection.80 Integer 3; /* both */
+	SnmpMibObject docsDevFilterIpIfIndex.80 Integer 0 ;
+	SnmpMibObject docsDevFilterIpControl.80 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterIpStatus.80 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterIpDestPortHigh.80 Integer 9898 ;
+	SnmpMibObject docsDevFilterIpDestPortLow.80 Integer 9898 ;
+	SnmpMibObject docsDevFilterIpProtocol.80 Integer 6 ;
+	SnmpMibObject enterprises.1429.79.2.3.2.1.1.32 Integer 1 ;
+	SnmpMibObject docsDevFilterLLCUnmatchedAction.0 Integer 1; /* discard */
+	SnmpMibObject docsDevFilterLLCIfIndex.1 Integer 0 ;
+	SnmpMibObject docsDevFilterLLCProtocolType.1 Integer 1; /* ethertype */
+	SnmpMibObject docsDevFilterLLCProtocol.1 Integer 2048 ;
+	SnmpMibObject docsDevFilterLLCStatus.1 Integer 4; /* createAndGo */
+	SnmpMibObject docsDevFilterLLCIfIndex.2 Integer 0 ;
+	SnmpMibObject docsDevFilterLLCProtocolType.2 Integer 1; /* ethertype */
+	SnmpMibObject docsDevFilterLLCProtocol.2 Integer 2054 ;
+	SnmpMibObject docsDevFilterLLCStatus.2 Integer 4; /* createAndGo */
+	/* CmMic b55462b9f23dd9faf9c838d356884c62; */
+	/* CmtsMic af5f1066cb3a0afd94c1beb48d5fef34; */
+	/*EndOfDataMkr*/
+}

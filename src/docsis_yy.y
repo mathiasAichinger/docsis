@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001,2005 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +37,8 @@ extern unsigned int line; 	/* current line number, defined in a.l */
 extern struct tlv *global_tlvtree_head; /* Global list of all config TLVs */
 extern symbol_type *global_symtable;
 extern FILE *yyin;
+extern int yy_scan_string(const char *);
+extern int yylex_destroy();
 
 struct tlv *_my_tlvtree_head;
 
@@ -72,9 +73,6 @@ struct tlv *_my_tlvtree_head;
 %token <strval>  T_STRING
 %token <strval>  T_HEX_STRING
 %token <strval>  T_TIMETICKS
-%token <strval>  T_IP_LIST
-%token <strval>  T_IP6_LIST
-%token <strval>  T_IP6_PREFIX_LIST
 
 %token <uintval>  T_ASNTYPE_INT
 %token <uintval>  T_ASNTYPE_UINT
@@ -99,7 +97,7 @@ struct tlv *_my_tlvtree_head;
 %token <uintval>  T_TLV_STR_VALUE
 %token <uintval>  T_TLV_STRZERO_VALUE
 %token <uintval>  T_TLV_TYPE
-%token <uintval>  T_IP_IP6_PORT
+
 
 %type <tlvptr>  assignment_stmt
 %type <tlvptr>  generic_stmt
@@ -173,15 +171,7 @@ assignment_stmt:  T_IDENTIFIER T_INTEGER ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
-		| T_IDENTIFIER T_IP_LIST ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_IP6 ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}
-		| T_IDENTIFIER T_IP6_LIST ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}
-		| T_IDENTIFIER T_IP6_PREFIX_LIST ';' {
-			$$ = create_tlv ($1, (union t_val *)&$2);}
-		| T_IDENTIFIER T_IP_IP6_PORT ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
 		| T_IDENTIFIER T_MAC ';' {
 			$$ = create_tlv ($1, (union t_val *)&$2);}
@@ -256,10 +246,10 @@ create_tlv(struct symbol_entry *sym_ptr, union t_val *value)
   TLVINIT(tlvbuf);
   tlvbuf->docs_code = sym_ptr->docsis_code;
   tlvbuf->tlv_len = sym_ptr->encode_func(tlvbuf->tlv_value,value,sym_ptr);
-/*		if (tlvbuf->tlv_len <= 0 ) {
+		if (tlvbuf->tlv_len <= 0 ) {
 			fprintf(stderr, "Got 0-length value while scanning for %s at line %d\n",sym_ptr->sym_ident,line );
 			exit (-1);
-   		} */
+   		}
   return tlvbuf;
 }
 
@@ -627,7 +617,7 @@ unsigned int tlvtreelen (struct tlv *tlv)
    return current_size;
 }
 
-int parse_config_file ( char *file, struct tlv **parse_tree_result )
+int parse_config_file ( char *file, struct tlv **parse_tree_result, char *mtahash )
 {
   FILE *cf;
   int rval;
@@ -636,18 +626,27 @@ int parse_config_file ( char *file, struct tlv **parse_tree_result )
   {
 	cf = stdin;
   }
+  else if ( strcmp(mtahash, "") )
+  {
+  	//if cf is not set the encoder runs into a "segmentation fault"!
+	cf = stdin;
+	yy_scan_string(mtahash);
+  } 
   else if ( (cf = fopen ( file, "r" )) == NULL )
   {
-	fprintf (stderr, "docsis: Can't open input file %s\n", file );
+  	fprintf (stderr, "docsis: Can't open input file %s\n", file );
 	return -1;
   }
 
   yyin = cf ;
+
 #ifdef DEBUG
   yydebug = 1;
 #endif
+
   rval = yyparse();
   if (!rval) *parse_tree_result = _my_tlvtree_head;
   fclose(cf);
+  yylex_destroy();  
   return rval;
 }

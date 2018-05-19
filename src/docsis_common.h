@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +31,7 @@
 
 
 #ifndef NUM_IDENTIFIERS
-#define NUM_IDENTIFIERS 1427
+#define NUM_IDENTIFIERS 177
 #endif /*  NUM_IDENTIFIERS, needed in docsis_symtable.h  */
 
 #define MAXINT 2000000000
@@ -52,7 +51,7 @@ typedef void (*decode_func_t) (unsigned char *, struct symbol_entry *, size_t le
 
 struct symbol_entry {
 	unsigned int id;
-	char sym_ident[50];
+	char sym_ident[30];
 	unsigned char docsis_code;
 	unsigned int parent_id;
 	encode_func_t encode_func;

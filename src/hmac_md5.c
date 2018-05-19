@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002, 2003 Evvolve Media SRL, office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,10 +34,10 @@ void md5_print_digest ( unsigned char *digest )
 {
   int j;
   /* TODO check that the buffer actually contains 16 chars ... */
-  fprintf(stdout, " --- MD5 DIGEST: 0x");
+  fprintf(stderr, " --- MD5 DIGEST: 0x");
   for (j=0;j<16;j++)
-	fprintf(stdout, "%02x", digest[j] );
-  fprintf(stdout, "\n");
+	fprintf(stderr, "%02x", digest[j] );
+  fprintf(stderr, "\n");
 }
 
 /*
@@ -71,9 +70,9 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, size_t key_len, 
 
                 MD5_CTX      tctx;
 
-                MD5_Init(&tctx);
-                MD5_Update(&tctx, key, key_len);
-                MD5_Final(tmpdigest,&tctx);
+                MD5Init(&tctx);
+                MD5Update(&tctx, key, key_len);
+                MD5Final(tmpdigest,&tctx);
 
                 memcpy (tk, tmpdigest, 16);
 		key = tk;
@@ -105,18 +104,18 @@ hmac_md5(unsigned char *text, int text_len, unsigned char *key, size_t key_len, 
         /*
          * perform inner MD5
          */
-        MD5_Init(&context);                   /* init context for 1st
+        MD5Init(&context);                   /* init context for 1st
                                               * pass */
-        MD5_Update(&context, k_ipad, 64);      /* start with inner pad */
-        MD5_Update(&context, text, text_len); /* then text of datagram */
-        MD5_Final(digest, &context);          /* finish up 1st pass */
+        MD5Update(&context, k_ipad, 64);      /* start with inner pad */
+        MD5Update(&context, text, text_len); /* then text of datagram */
+        MD5Final(digest, &context);          /* finish up 1st pass */
         /*
          * perform outer MD5
          */
-        MD5_Init(&context);                   /* init context for 2nd
+        MD5Init(&context);                   /* init context for 2nd
                                               * pass */
-        MD5_Update(&context, k_opad, 64);     /* start with outer pad */
-        MD5_Update(&context, digest, 16);     /* then results of 1st
+        MD5Update(&context, k_opad, 64);     /* start with outer pad */
+        MD5Update(&context, digest, 16);     /* then results of 1st
                                               * hash */
-        MD5_Final(digest,&context);          /* finish up 2nd pass */
+        MD5Final(digest,&context);          /* finish up 2nd pass */
 }

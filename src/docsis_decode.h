@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,21 +30,11 @@ struct symbol_entry *find_symbol_by_code_and_pid (unsigned char code, unsigned i
 
 void decode_special (unsigned char *tlvbuf, symbol_type *sym, size_t length);
 void decode_uint (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length );
-void decode_uint24 (unsigned char *tlvbuf, struct symbol_entry *sym, size_t length );
 void decode_ushort (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_uchar (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_ip_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_ip6_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_ip6_prefix_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_char_ip_ip6 (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_ip_ip6_port (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_lenzero (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ether (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_dual_qtag (unsigned char *tlvbuf, symbol_type *sym, size_t length );
-void decode_char_list (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_ethermask (unsigned char *tlvbuf, symbol_type *sym, size_t length );
 void decode_md5 (unsigned char *tlvbuf, symbol_type *sym, size_t length);
 void decode_snmp_wd (unsigned char *tlvbuf, symbol_type *sym, size_t length);

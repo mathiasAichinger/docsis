@@ -2,7 +2,6 @@
  *  DOCSIS configuration file encoder.
  *  Copyright (c) 2001 Cornel Ciocirlan, ctrl@users.sourceforge.net.
  *  Copyright (c) 2002,2003,2004,2005 Evvolve Media SRL,office@evvolve.com
- *  Copyright (c) 2014 - 2015 Adrian Simionov, daniel.simionov@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +26,5 @@
 extern struct tlv *global_tlvtree_head;
 extern symbol_type *global_symtable;
 extern unsigned int line;	/* defined in docsis_lex.l */
-extern unsigned int nohash;
 
 #endif /* _DOCSIS_GLOBALS_H */
